@@ -8,6 +8,6 @@ from bt_api_ripio.feeds.live_ripio.spot import RipioRequestDataSpot
 
 
 def register_ripio(registry: type[ExchangeRegistry]) -> None:
-    registry.register_feed("RIPIO___SPOT", RipioRequestDataSpot)
-    registry.register_exchange_data("RIPIO___SPOT", RipioExchangeDataSpot)
-    registry.register_balance_handler("RIPIO___SPOT", _ripio_balance_handler)
+    registry.register_feed('RIPIO___SPOT', RipioRequestDataSpot)
+    registry.register_exchange_data('RIPIO___SPOT', RipioExchangeDataSpot)
+    registry.register_balance_handler('RIPIO___SPOT', _ripio_balance_handler)

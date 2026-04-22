@@ -9,6 +9,7 @@ from bt_api_base.containers.requestdatas.request_data import RequestData
 from bt_api_base.feeds.capability import Capability
 from bt_api_base.feeds.feed import Feed
 from bt_api_base.feeds.http_client import HttpClient
+
 from bt_api_ripio.exchange_data import RipioExchangeDataSpot
 
 
@@ -29,47 +30,43 @@ class RipioRequestData(Feed):
     def __init__(self, data_queue: Any = None, **kwargs: Any) -> None:
         super().__init__(data_queue, **kwargs)
         self.data_queue = data_queue
-        self.exchange_name = kwargs.get("exchange_name", "RIPIO___SPOT")
-        self.asset_type = kwargs.get("asset_type", "SPOT")
+        self.exchange_name = kwargs.get('exchange_name', 'RIPIO___SPOT')
+        self.asset_type = kwargs.get('asset_type', 'SPOT')
         self._params = RipioExchangeDataSpot()
         self._http_client = HttpClient(venue=self.exchange_name, timeout=30)
-        self.api_key = kwargs.get("public_key") or kwargs.get("api_key", "")
-        self.api_secret = (
-            kwargs.get("private_key") or kwargs.get("api_secret") or kwargs.get("secret_key") or ""
-        )
+        self.api_key = kwargs.get('public_key') or kwargs.get('api_key', '')
+        self.api_secret = kwargs.get('private_key') or kwargs.get('api_secret') or kwargs.get('secret_key') or ''
 
-    def _generate_signature(self, method: str, path: str, timestamp: str, body: str = "") -> str:
+    def _generate_signature(self, method: str, path: str, timestamp: str, body: str = '') -> str:
         sign_str = timestamp + method + path + body
-        signature = hmac.new(
-            self.api_secret.encode("utf-8"), sign_str.encode("utf-8"), hashlib.sha256
-        ).hexdigest()
+        signature = hmac.new(self.api_secret.encode('utf-8'), sign_str.encode('utf-8'), hashlib.sha256).hexdigest()
         return signature
 
-    def _build_headers(self, method: str, path: str, body: str = "", is_sign: bool = False) -> dict:
+    def _build_headers(self, method: str, path: str, body: str = '', is_sign: bool = False) -> dict:
         headers = {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
         }
 
         if is_sign and self.api_key and self.api_secret:
             timestamp = str(int(time.time() * 1000))
             signature = self._generate_signature(method, path, timestamp, body)
-            headers["X-API-KEY"] = self.api_key
-            headers["X-API-SIGNATURE"] = signature
-            headers["X-API-TIMESTAMP"] = timestamp
+            headers['X-API-KEY'] = self.api_key
+            headers['X-API-SIGNATURE'] = signature
+            headers['X-API-TIMESTAMP'] = timestamp
 
         return headers
 
     def _build_url(self, path: str, params: dict[str, Any] | None = None) -> str:
-        if " " in path:
-            path = path.split(" ", 1)[1]
+        if ' ' in path:
+            path = path.split(' ', 1)[1]
 
         url = self._params.rest_url + path
 
         if params:
             from urllib.parse import urlencode
 
-            url = f"{url}?{urlencode(params)}"
+            url = f'{url}?{urlencode(params)}'
 
         return url
 
@@ -82,11 +79,11 @@ class RipioRequestData(Feed):
         timeout: int = 10,
         is_sign: bool = False,
     ) -> RequestData:
-        method = "GET"
-        body_str = ""
+        method = 'GET'
+        body_str = ''
 
         if body:
-            method = "POST"
+            method = 'POST'
             import json
 
             body_str = json.dumps(body)
@@ -99,13 +96,13 @@ class RipioRequestData(Feed):
                 method=method,
                 url=url,
                 headers=headers,
-                json_data=body if method == "POST" else None,
+                json_data=body if method == 'POST' else None,
             )
-            self.logger.info(f"Request: {method} {url}")
+            self.logger.info(f'Request: {method} {url}')
             return RequestData(response, extra_data or {})
 
         except Exception as e:
-            self.logger.error(f"Request failed: {e}")
+            self.logger.error(f'Request failed: {e}')
             raise
 
     async def async_request(
@@ -117,11 +114,11 @@ class RipioRequestData(Feed):
         timeout: int = 5,
         is_sign: bool = False,
     ) -> RequestData:
-        method = "GET"
-        body_str = ""
+        method = 'GET'
+        body_str = ''
 
         if body:
-            method = "POST"
+            method = 'POST'
             import json
 
             body_str = json.dumps(body)
@@ -134,13 +131,13 @@ class RipioRequestData(Feed):
                 method=method,
                 url=url,
                 headers=headers,
-                json_data=body if method == "POST" else None,
+                json_data=body if method == 'POST' else None,
             )
-            self.logger.info(f"Async Request: {method} {url}")
+            self.logger.info(f'Async Request: {method} {url}')
             return RequestData(response, extra_data or {})
 
         except Exception as e:
-            self.logger.error(f"Async request failed: {e}")
+            self.logger.error(f'Async request failed: {e}')
             raise
 
     def async_callback(self, future):
@@ -149,19 +146,19 @@ class RipioRequestData(Feed):
             if result is not None:
                 self.push_data_to_queue(result)
         except Exception as e:
-            self.logger.error(f"Async callback error: {e}")
+            self.logger.error(f'Async callback error: {e}')
 
     def _get_server_time(self, extra_data=None, **kwargs):
-        path = self._params.get_rest_path("get_tick").replace(":symbol", "BTC_USDT")
+        path = self._params.get_rest_path('get_tick').replace(':symbol', 'BTC_USDT')
         if extra_data is None:
             extra_data = {}
         extra_data.update(
             {
-                "exchange_name": self.exchange_name,
-                "symbol_name": "",
-                "asset_type": self.asset_type,
-                "request_type": "get_server_time",
-                "normalize_function": self._get_server_time_normalize_function,
+                'exchange_name': self.exchange_name,
+                'symbol_name': '',
+                'asset_type': self.asset_type,
+                'request_type': 'get_server_time',
+                'normalize_function': self._get_server_time_normalize_function,
             }
         )
         return path, {}, extra_data
@@ -175,9 +172,9 @@ class RipioRequestData(Feed):
         if not input_data:
             return None, False
         if isinstance(input_data, dict):
-            data = input_data.get("data", input_data)
+            data = input_data.get('data', input_data)
             if isinstance(data, dict):
-                ts = data.get("timestamp") or data.get("time")
+                ts = data.get('timestamp') or data.get('time')
                 return ts, True
         return input_data, True
 
