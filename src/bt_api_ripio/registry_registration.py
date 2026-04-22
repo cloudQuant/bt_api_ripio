@@ -1,7 +1,11 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from bt_api_base.registry import ExchangeRegistry
+
 from bt_api_base.balance_utils import simple_balance_handler as _ripio_balance_handler
-from bt_api_base.registry import ExchangeRegistry
 
 from bt_api_ripio.exchange_data import RipioExchangeDataSpot
 from bt_api_ripio.feeds.live_ripio.spot import RipioRequestDataSpot

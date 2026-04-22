@@ -40,7 +40,7 @@ class RipioExchangeData(ExchangeData):
 
     def get_rest_path(self, request_type: str, **kwargs) -> str:
         if request_type not in self.rest_paths or self.rest_paths[request_type] == '':
-            raise ValueError(f'[{self.exchange_name}] REST path not found: {request_type}')
+            raise ValueError('REST path not found')
         path = self.rest_paths[request_type]
         if kwargs:
             for k, v in kwargs.items():
