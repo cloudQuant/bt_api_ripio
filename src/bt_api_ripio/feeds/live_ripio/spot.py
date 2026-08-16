@@ -1,3 +1,4 @@
+"""Module-level docstring."""
 from __future__ import annotations
 
 from typing import Any
@@ -9,6 +10,7 @@ from bt_api_ripio.feeds.live_ripio.request_base import RipioRequestData
 
 
 class RipioRequestDataSpot(RipioRequestData):
+    """Class RipioRequestDataSpot"""
     @classmethod
     def _capabilities(cls) -> set[Capability]:
         return {
@@ -23,6 +25,7 @@ class RipioRequestDataSpot(RipioRequestData):
         }
 
     def __init__(self, data_queue: Any = None, **kwargs: Any) -> None:
+        """__init__ method"""
         super().__init__(data_queue, **kwargs)
         self.exchange_name = kwargs.get("exchange_name", "RIPIO___SPOT")
         self.asset_type = kwargs.get("asset_type", "SPOT")
@@ -55,10 +58,12 @@ class RipioRequestDataSpot(RipioRequestData):
         return [ticker], ticker is not None
 
     def get_tick(self, symbol, extra_data=None, **kwargs):
+        """get_tick method"""
         path, params, extra_data = self._get_tick(symbol, extra_data, **kwargs)
         return self.request(path, params=params, extra_data=extra_data)
 
     def async_get_tick(self, symbol, extra_data=None, **kwargs):
+        """async_get_tick method"""
         path, params, extra_data = self._get_tick(symbol, extra_data, **kwargs)
         self.submit(
             self.async_request(path, params=params, extra_data=extra_data),
@@ -96,10 +101,12 @@ class RipioRequestDataSpot(RipioRequestData):
         return [depth], depth is not None
 
     def get_depth(self, symbol, count=20, extra_data=None, **kwargs):
+        """get_depth method"""
         path, params, extra_data = self._get_depth(symbol, count, extra_data, **kwargs)
         return self.request(path, params=params, extra_data=extra_data)
 
     def async_get_depth(self, symbol, count=20, extra_data=None, **kwargs):
+        """async_get_depth method"""
         path, params, extra_data = self._get_depth(symbol, count, extra_data, **kwargs)
         self.submit(
             self.async_request(path, params=params, extra_data=extra_data),
@@ -144,6 +151,7 @@ class RipioRequestDataSpot(RipioRequestData):
     def get_kline(
         self, symbol, period, count=100, extra_data=None, from_time=None, to_time=None, **kwargs
     ):
+        """get_kline method"""
         path, params, extra_data = self._get_kline(
             symbol, period, count, from_time, to_time, extra_data, **kwargs
         )
@@ -152,6 +160,7 @@ class RipioRequestDataSpot(RipioRequestData):
     def async_get_kline(
         self, symbol, period, count=100, extra_data=None, from_time=None, to_time=None, **kwargs
     ):
+        """async_get_kline method"""
         path, params, extra_data = self._get_kline(
             symbol, period, count, from_time, to_time, extra_data, **kwargs
         )
@@ -185,6 +194,7 @@ class RipioRequestDataSpot(RipioRequestData):
         return products or [], products is not None
 
     def get_exchange_info(self, extra_data=None, **kwargs):
+        """get_exchange_info method"""
         path, params, extra_data = self._get_exchange_info(extra_data, **kwargs)
         return self.request(path, params=params, extra_data=extra_data)
 
@@ -216,6 +226,7 @@ class RipioRequestDataSpot(RipioRequestData):
         return trades or [], trades is not None
 
     def get_trades(self, symbol, limit=100, extra_data=None, **kwargs):
+        """get_trades method"""
         path, params, extra_data = self._get_trades(symbol, limit, extra_data, **kwargs)
         return self.request(path, params=params, extra_data=extra_data)
 
@@ -243,6 +254,7 @@ class RipioRequestDataSpot(RipioRequestData):
         return [data], True
 
     def get_balance(self, symbol=None, extra_data=None, **kwargs):
+        """get_balance method"""
         path, params, extra_data = self._get_balance(symbol, extra_data, **kwargs)
         return self.request(path, params=params, extra_data=extra_data, is_sign=True)
 
@@ -268,6 +280,7 @@ class RipioRequestDataSpot(RipioRequestData):
         return [data], True
 
     def get_account(self, symbol="ALL", extra_data=None, **kwargs):
+        """get_account method"""
         path, params, extra_data = self._get_account(extra_data, **kwargs)
         return self.request(path, params=params, extra_data=extra_data, is_sign=True)
 
@@ -313,6 +326,7 @@ class RipioRequestDataSpot(RipioRequestData):
         extra_data=None,
         **kwargs,
     ):
+        """make_order method"""
         path, params, extra_data = self._make_order(
             symbol, volume, price, order_type, offset, extra_data, **kwargs
         )
@@ -333,5 +347,6 @@ class RipioRequestDataSpot(RipioRequestData):
         return path, {}, extra_data
 
     def cancel_order(self, symbol, order_id, extra_data=None, **kwargs):
+        """cancel_order method"""
         path, params, extra_data = self._cancel_order(symbol, order_id, extra_data, **kwargs)
         return self.request(path, params=params, extra_data=extra_data, is_sign=True)

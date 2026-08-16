@@ -1,3 +1,4 @@
+"""Module documentation"""
 from __future__ import annotations
 
 from typing import Any
@@ -6,8 +7,10 @@ from bt_api_base.error import ErrorCategory, ErrorTranslator, UnifiedError, Unif
 
 
 class RipioErrorTranslator(ErrorTranslator):
+    """Class RipioErrorTranslator"""
     @classmethod
     def translate(cls, raw_error: dict[str, Any], venue: str) -> UnifiedError | None:
+        """translate method"""
         msg = str(raw_error.get("error", raw_error.get("message", "")))
         lower = msg.lower()
         if "auth" in lower or "signature" in lower:

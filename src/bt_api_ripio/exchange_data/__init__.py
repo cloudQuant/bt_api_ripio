@@ -1,3 +1,4 @@
+"""Module-level docstring."""
 from __future__ import annotations
 
 from bt_api_base.containers.exchanges.exchange_data import ExchangeData
@@ -13,7 +14,9 @@ _FALLBACK_REST_PATHS = {
 
 
 class RipioExchangeData(ExchangeData):
+    """Class RipioExchangeData"""
     def __init__(self) -> None:
+        """__init__ method"""
         super().__init__()
         self.exchange_name = "RIPIO___SPOT"
         self.rest_url = "https://api.exchange.ripio.com"
@@ -34,12 +37,15 @@ class RipioExchangeData(ExchangeData):
         self.legal_currency = ["ARS", "BRL", "EUR", "MXN", "USD", "USDT", "BTC", "ETH", "UAH"]
 
     def get_symbol(self, symbol: str) -> str:
+        """get_symbol method"""
         return symbol.replace("-", "_").replace("/", "_").upper()
 
     def get_period(self, period: str) -> str:
+        """get_period method"""
         return self.kline_periods.get(period, period)
 
     def get_rest_path(self, request_type: str, **kwargs) -> str:
+        """get_rest_path method"""
         if request_type not in self.rest_paths or self.rest_paths[request_type] == "":
             raise ValueError(f"[{self.exchange_name}] REST path not found: {request_type}")
         path = self.rest_paths[request_type]
@@ -50,9 +56,12 @@ class RipioExchangeData(ExchangeData):
 
 
 class RipioExchangeDataSpot(RipioExchangeData):
+    """Class RipioExchangeDataSpot"""
     def __init__(self) -> None:
+        """__init__ method"""
         super().__init__()
         self.asset_type = "SPOT"
 
     def get_symbol(self, symbol: str) -> str:
+        """get_symbol method"""
         return symbol.replace("-", "_").replace("/", "_").upper()

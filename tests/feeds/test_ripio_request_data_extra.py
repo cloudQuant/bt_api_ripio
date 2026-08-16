@@ -1,3 +1,4 @@
+"""Module-level docstring."""
 from __future__ import annotations
 
 from typing import Any
@@ -6,6 +7,7 @@ from bt_api_ripio.feeds.live_ripio.request_base import RipioRequestData
 
 
 def test_ripio_accepts_public_private_key_aliases(monkeypatch: Any) -> None:
+    """test_ripio_accepts_public_private_key_aliases function"""
     request_data = RipioRequestData(public_key="public-key", private_key="secret-key")
 
     timestamp = "1710000000000"

@@ -1,3 +1,4 @@
+"""Module documentation"""
 from __future__ import annotations
 
 import hashlib
@@ -13,6 +14,7 @@ from bt_api_ripio.exchange_data import RipioExchangeDataSpot
 
 
 class RipioRequestData(Feed):
+    """Class RipioRequestData"""
     @classmethod
     def _capabilities(cls) -> set[Capability]:
         return {
@@ -27,6 +29,7 @@ class RipioRequestData(Feed):
         }
 
     def __init__(self, data_queue: Any = None, **kwargs: Any) -> None:
+        """__init__ method"""
         super().__init__(data_queue, **kwargs)
         self.data_queue = data_queue
         self.exchange_name = kwargs.get("exchange_name", "RIPIO___SPOT")
@@ -82,6 +85,7 @@ class RipioRequestData(Feed):
         timeout: int = 10,
         is_sign: bool = False,
     ) -> RequestData:
+        """request method"""
         method = "GET"
         body_str = ""
 
@@ -117,6 +121,7 @@ class RipioRequestData(Feed):
         timeout: int = 5,
         is_sign: bool = False,
     ) -> RequestData:
+        """async_request method"""
         method = "GET"
         body_str = ""
 
@@ -144,6 +149,7 @@ class RipioRequestData(Feed):
             raise
 
     def async_callback(self, future):
+        """async_callback method"""
         try:
             result = future.result()
             if result is not None:
@@ -167,6 +173,7 @@ class RipioRequestData(Feed):
         return path, {}, extra_data
 
     def get_server_time(self, extra_data=None, **kwargs):
+        """get_server_time method"""
         path, params, extra_data = self._get_server_time(extra_data, **kwargs)
         return self.request(path, params=params, extra_data=extra_data)
 
@@ -182,14 +189,18 @@ class RipioRequestData(Feed):
         return input_data, True
 
     def push_data_to_queue(self, data):
+        """push_data_to_queue method"""
         if self.data_queue is not None:
             self.data_queue.put(data)
 
     def connect(self) -> None:
+        """connect method"""
         pass
 
     def disconnect(self) -> None:
+        """disconnect method"""
         pass
 
     def is_connected(self) -> bool:
+        """is_connected method"""
         return True
